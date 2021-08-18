@@ -3,8 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
-use App\Notifications\Email;
-use App\Notifications\Telegram;
+use App\Notifications\UserRegistrated;
 
 class UserObserver
 {
@@ -16,8 +15,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $user->notify(new Email());
-        $user->notify(new Telegram());
+        $user->notify(new UserRegistrated());
     }
 
 }

@@ -6,8 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Telegram\TelegramChannel;
+use NotificationChannels\Telegram\TelegramMessage;
 
-class Email extends Notification implements ShouldQueue
+class UserRegistrated extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -29,7 +31,7 @@ class Email extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', TelegramChannel::class];
     }
 
     /**
@@ -45,6 +47,13 @@ class Email extends Notification implements ShouldQueue
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))//можно убрать
                     ->line('Thank you for using our application!');//можно убрать
+    }
+
+    public function toTelegram($notifiable)
+    {
+        return TelegramMessage::create()
+            ->to(-554224549)
+            ->content("Поздравляем! Вы успешно зарегистрированы!");
     }
 
     /**
